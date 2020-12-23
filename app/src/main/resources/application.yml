@@ -1,0 +1,49 @@
+server:
+  port: 9090
+
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://healthy_database:3306/marry?useUnicode=true&characterEncoding=utf-8&serverTimezone=Asia/Shanghai
+    username: root
+    password: slroot
+    hikari:        #spring自带连接池
+      pool-name: Retail_HikariCP
+      minimum-idle: 5 #最小空闲连接数量
+      idle-timeout: 180000 #空闲连接存活最大时间，默认600000（10分钟）
+      maximum-pool-size: 10 #连接池最大连接数，默认是10
+      auto-commit: true  #此属性控制从池返回的连接的默认自动提交行为,默认值：true
+      max-lifetime: 1800000 #此属性控制池中连接的最长生命周期，值0表示无限生命周期，默认1800000即30分钟
+      connection-timeout: 30000 #数据库连接超时时间,默认30秒，即30000
+      connection-test-query: SELECT 1
+#  redis:
+#    host: localhost
+#    lettuce:
+#          pool:
+#            max-active: 16   #默认是不使用连接池的，只有配置 redis.lettuce.pool下的属性的时候才可以使用到redis连接池
+
+mybatis-plus:
+  mapper-locations: classpath:/mapper/*Mapper.xml
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+  global-config:
+    db-config:
+      id-type: assign_id #自3.3.0开始,entity的id默认使用雪花算法+UUID
+
+logging:  #默认都是logback需要参数
+  level:
+    root: info  #开发debug
+  file:
+    max-size: 50MB #每50m 生成一个新日志
+    path: ./logs
+  pattern:      #用%replace(%caller{1}，控制台显示在开发时更方便,
+      console: "%d{yyyy/MM/dd-HH:mm:ss} [%thread] %-5level - %msg -[%replace(%caller{1}){'\t|Caller.{1}0| at|\r\n', ''}]%n"
+      file: "%d{yyyy/MM/dd-HH:mm:ss} [%thread] %-5level- %msg -%logger%n" #显示行数 方法名会影响性能，caller也会影响，直接用logger
+wechat:
+  appId: wxc2c8acb4daf8eddf
+  secret: 025b5a858594d20cf95e3aeee6949fb8
+#wx:
+#  mp:
+#    appId: wxf4138bf72d6d1763
+#    secret: ea7a87bd0acc176b0ace1fa659a2e566
+
